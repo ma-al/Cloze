@@ -1,3 +1,6 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+
 from model import BiLSTM_new, BiLSTM
 import pickle
 from utiliz import Dataset
