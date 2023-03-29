@@ -129,6 +129,17 @@ from utiliz import Dataset
 
 
 dataset = Dataset(X_word_source, X_char_source, Y_source, X_word_target, X_char_target, Y_target)
+
 import pickle
-with open('dataset/example.pkl', 'wb') as fp:
+from pathlib import Path
+
+# prepare pickle file location on first run
+output_file = Path('dataset', 'example.pkl').absolute()
+output_file.parent.mkdir(parents=True, exist_ok=True)
+output_file.touch()
+
+with output_file.open('wb') as fp:
     pickle.dump(dataset, fp)
+
+file_size = f'{output_file.stat().st_size:,}'
+print(f'Saved {file_size} bytes in {output_file}')
