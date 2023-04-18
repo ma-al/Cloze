@@ -2,6 +2,8 @@ import json
 from keras_preprocessing import sequence
 from sklearn.preprocessing import LabelBinarizer
 import numpy as np
+from pprint import pprint as pp
+from deepdiff import DeepDiff
 
 source_building_list = ['example']
 target_building = 'example'
@@ -15,14 +17,29 @@ source_label_dicts_list = []
 for b in source_building_list:
     with open('../data/'+b+'_word_dict.json', 'r') as fp:
         source_word_dicts_list.append(json.load(fp))
+    with open('../data/'+b+'_label_dict.json', 'r') as fp:
+        source_label_dicts_list.append(json.load(fp))
+
+
 with open('../data/'+target_building+'_word_dict.json', 'r') as fp:
     target_word_dict = json.load(fp)
 
-for b in source_building_list:
-    with open('../data/'+b+'_label_dict.json', 'r') as fp:
-        source_label_dicts_list.append(json.load(fp))
 with open('../data/'+target_building+'_label_dict.json', 'r') as fp:
     target_label_dict = json.load(fp)
+
+
+pp(source_word_dicts_list)
+# pp(source_label_dicts_list)
+pp(target_word_dict)
+# pp(target_label_dict)
+
+# looks like we're loading target and source buildings from same file above
+assert source_word_dicts_list[0] == target_word_dict
+
+diff = DeepDiff(source_word_dicts_list[0], target_word_dict)
+print(f'Deep Diff = {diff}')
+# exit()
+
 
 X_word_source = []
 X_char_source = []
@@ -34,6 +51,7 @@ word_maxlen = 10
 char_maxnum = 10
 for dict_index in range(len(source_word_dicts_list)):
     for key, value in source_word_dicts_list[dict_index].items():
+        print(key, value)
         chars = []
         for i in range(word_maxlen):
             if i < len(value):
@@ -47,6 +65,15 @@ for dict_index in range(len(source_word_dicts_list)):
         X_char_source.append(chars)
         X_word_source.append(source_word_dicts_list[dict_index][key])
         Y_source.append(source_label_dicts_list[dict_index][key])
+
+
+# pp(X_char_source)
+# pp(X_word_source)
+# pp(Y_source)
+
+exit()
+
+
 
 for key, value in target_word_dict.items():
     chars = []

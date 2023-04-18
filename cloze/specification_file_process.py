@@ -59,4 +59,6 @@ with open('../data/example_word_dict.json', 'r') as fp:
     word_dict = json.load(fp)
 
 label_dict = generate_label(word_dict, new_sp_file)
-print(label_dict)
+
+from pprint import pprint as pp
+pp(label_dict)
